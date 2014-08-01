@@ -10,8 +10,8 @@ var main_state = {
 	  // Function called first to load all the assets
       // Change the background color of the game
 
-      this.game.stage.backgroundColor = '#71c5cf';
-      // this.game.load.image('background', 'assets/b.png');
+      // this.game.stage.backgroundColor = '#71c5cf';
+      this.game.load.image('background', 'assets/b.png');
       // Load the bird sprite
       this.game.load.image('bird', 'assets/bird.png');
       // Load the pipe sprite
@@ -23,7 +23,7 @@ var main_state = {
       // fuck
       this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-      // this.game.add.sprite(0 ,0, 'background');
+      this.game.add.sprite(0 ,0, 'background');
 
    	  // Fuction called after 'preload' to setup the game
       this.score = 0;
@@ -39,8 +39,9 @@ var main_state = {
       this.bird.body.gravity.y = 1000;
       this.bird.anchor.setTo(-0.2, 0.5);
 
-      var space_key = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-      space_key.onDown.add(this.jump, this);
+      // var space_key = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+      // space_key.onDown.add(this.jump, this);
+      this.game.input.onDown.add(this.jump, this);
       // pipe creation
       this.pipes = this.game.add.group();
 
