@@ -7,7 +7,9 @@ var main_state = {
     preload: function() {
 	  // Function called first to load all the assets
       // Change the background color of the game
-      this.game.stage.backgroundColor = '#71c5cf';
+
+      // this.game.stage.backgroundColor = '#71c5cf';
+      this.game.load.image('background', 'assets/b.png');
       // Load the bird sprite
       this.game.load.image('bird', 'assets/bird.png');
       // Load the pipe sprite
@@ -16,6 +18,11 @@ var main_state = {
     },
 
     create: function() {
+      // fuck
+      this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+      this.game.add.sprite(0 ,0, 'background');
+
    	  // Fuction called after 'preload' to setup the game
       this.score = 0;
       var style = { font: "30px Arial", fill: "#ffffff" };
@@ -23,6 +30,10 @@ var main_state = {
 
       // Display the bird on the screen
       this.bird = this.game.add.sprite(100, 245, 'bird');
+
+      // fuck
+      this.game.physics.arcade.enable(this.bird);
+
       this.bird.body.gravity.y = 1000;
       this.bird.anchor.setTo(-0.2, 0.5);
 
@@ -30,8 +41,13 @@ var main_state = {
       space_key.onDown.add(this.jump, this);
       // pipe creation
       this.pipes = this.game.add.group();
+
+      // fuck
+      this.pipes.enableBody = true;
+
       this.pipes.createMultiple(20, 'pipe');
-      this.timer = this.game.time.events.loop(1500, this.add_row_of_pipes, this);
+      this.pipes_timer = this.game.time.events.loop(1500, this.add_row_of_pipes, this);
+
       this.jump_sound = this.game.add.audio('jump');
     },
 
@@ -42,7 +58,11 @@ var main_state = {
       if (this.bird.angle < 20) {
         this.bird.angle += 1;
       }
-      this.game.physics.overlap(this.bird, this.pipes, this.hit_pipe, null, this);
+      // this.game.physics.overlap(this.bird, this.pipes, this.hit_pipe, null, this);
+
+      // fuck
+      this.game.physics.arcade.overlap(this.bird, this.pipes, this.hit_pipe, null, this);
+
     },
 
     hit_pipe: function() {
@@ -51,7 +71,8 @@ var main_state = {
       }
       this.bird.alive = false;
 
-      this.game.time.events.remove(this.timer);
+      this.game.time.events.remove(this.pipes_timer);
+
       this.pipes.forEachAlive(function(p){
         p.body.velocity.x = 0;
       }, this);
@@ -66,30 +87,54 @@ var main_state = {
       this.jump_sound.play();
     },
 
+    alert_window: function() {
+    },
+
     restart_game: function() {
-      this.game.time.events.remove(this.timer);
+      this.game.time.events.remove(this.pipes_timer);
       this.game.state.start('main');
+    },
+
+    add_score: function() {
+      this.score += 1;
+      this.label_score.text = this.score;
     },
 
     add_one_pipe: function(x, y) {
       var pipe = this.pipes.getFirstDead();
 
       // set new position of the pipe
-      pipe.reset(x, y);
-      pipe.body.velocity.x = -200;
 
+      // fuck
+      if (pipe) {
+        pipe.reset(x, y);
+      } else {
+        pipe = this.pipes.create(x, y, 'pipe');
+      };
+      pipe.body.velocity.x = -200;
       pipe.outOfBoundsKill = true;
+
+      // pipe.reset(x, y);
+
+      // pipe.body.velocity.x = -200;
+
+      // pipe.outOfBoundsKill = true;
     },
 
     add_row_of_pipes: function() {
       var hole = Math.floor(Math.random() * 5) + 1;
-      for (var i = 0; i < 8; i++) {
-        if (i != hole && i != hole + 1) {
-          this.add_one_pipe(400, i * 60 + 10);
+      for (var i = 0; i < 10; i++) {
+        if (i != hole && i != hole + 1 && i != hole + 2) {
+          this.add_one_pipe(400, i * 50);
         }
       };
-      this.score += 1;
-      this.label_score.content = this.score;
+      this.add_score();
+      // this.score += 1;
+
+      // //fuck
+      // this.label_score.text = this.score;
+
+      // // this.label_score.content = this.score;
     },
 };
 
