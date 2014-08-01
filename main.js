@@ -1,5 +1,7 @@
 // Initialize Phaser, and creates a 400x490px game
-var game = new Phaser.Game(400, 490, Phaser.AUTO, 'game_div');
+var width = $('#game_div').width() || 400;
+var height = $('#game_div').height() || 500;
+var game = new Phaser.Game(width, height, Phaser.AUTO, 'game_div');
 
 // Creates a new 'main' state that wil contain the game
 var main_state = {
@@ -8,8 +10,8 @@ var main_state = {
 	  // Function called first to load all the assets
       // Change the background color of the game
 
-      // this.game.stage.backgroundColor = '#71c5cf';
-      this.game.load.image('background', 'assets/b.png');
+      this.game.stage.backgroundColor = '#71c5cf';
+      // this.game.load.image('background', 'assets/b.png');
       // Load the bird sprite
       this.game.load.image('bird', 'assets/bird.png');
       // Load the pipe sprite
@@ -21,7 +23,7 @@ var main_state = {
       // fuck
       this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-      this.game.add.sprite(0 ,0, 'background');
+      // this.game.add.sprite(0 ,0, 'background');
 
    	  // Fuction called after 'preload' to setup the game
       this.score = 0;
@@ -53,8 +55,12 @@ var main_state = {
 
     update: function() {
 	  // Function called 60 times per second
-      if (this.bird.inWorld == false)
-        this.restart_game();
+      if (this.bird.inWorld == false) {
+        // 弹出框
+        this.alert_window();
+        this.game.destroy();
+        return;
+      };
       if (this.bird.angle < 20) {
         this.bird.angle += 1;
       }
@@ -88,6 +94,25 @@ var main_state = {
     },
 
     alert_window: function() {
+      // debug
+
+      var that = this;
+      var shadow = '<div class="ernie-ui-shadow"></div>'
+      var html = '<div class="ernie-ui-alert"><div class="ernie-ui-button"></div></div>'
+      var $e = $(html).append('本次得分: ' + this.label_score.text);
+
+      $shadow = $(shadow);
+      $shadow.css({'height': document.body.scrollHeight ? document.body.scrollHeight : "640px",'width': document.body.scrollWidth ? document.body.scrollWidth : "320px"});
+      $e.find('.ernie-ui-button').click(function(){
+        $e.remove();
+        $shadow.remove();
+        // that.restart_game();
+        // 这个写法就是shit, 浪费了用户手机流量
+        var url = window.location.href;
+        window.location.href = url;
+      });
+      $('body').append($e);
+      $('body').append($shadow);
     },
 
     restart_game: function() {
@@ -123,9 +148,9 @@ var main_state = {
 
     add_row_of_pipes: function() {
       var hole = Math.floor(Math.random() * 5) + 1;
-      for (var i = 0; i < 10; i++) {
+      for (var i = 0; i < Math.ceil(height / 50); i++) {
         if (i != hole && i != hole + 1 && i != hole + 2) {
-          this.add_one_pipe(400, i * 50);
+          this.add_one_pipe(width, i * 50);
         }
       };
       this.add_score();

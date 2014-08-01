@@ -3,13 +3,28 @@
 <head>
   <meta charset="utf-8" />
   <title>Flappy Bird Clone</title>
+  <meta name='HandheldFriendly'  content='True'/>
+  <meta name='viewport' content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no"/>
 
   <style>
-    #game_div {
-      width: 400px;
-      margin: auto;
-      margin-top: 50px;
+    body {
+      margin: 0;
     }
+    #game_div {
+      width: 100%;
+      margin: auto;
+    }
+    .ernie-ui-alert{width: 294px; height: 275px; left: 50%; margin-left: -150px; background:url(http://7bede40ef4e00.cdn.sohucs.com/d500b477f8107c0f248f47ba0f8bf6f0) no-repeat;position: absolute;
+      top: 238px;z-index: 200;text-align: center;line-height: 230px;font-size: 22px; color: #666666;}
+    .ernie-ui-alert .close{ height: 31px; width: 31px;position: absolute; right: -11px; top: 47px;
+        background: url(http://7bede40ef4e00.cdn.sohucs.com/c8487fd0881e9f7dea5838f9f34b559a) no-repeat;}
+    .ernie-ui-shadow{position: fixed; top: 0px; left: 0px; z-index: 100; background: #000; opacity: 0.84;}
+    .ernie-ui-button{background:url(http://7bede40ef4e00.cdn.sohucs.com/02daa313cce2dabd264f3c7464c91028) no-repeat; position: absolute; width: 199px; height: 52px; top: 139px; left: 47px;}
+
+
   </style>
 
 </head>
@@ -18,6 +33,7 @@
 
   <div id="game_div"> </div>
 
+  <script type="text/javascript" src="jquery-2.0.3.min.js"></script>
   <script type="text/javascript" src="phaser.min.js"></script>
   <script type="text/javascript" src="main.js"></script>
 </body>
